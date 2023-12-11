@@ -42,7 +42,7 @@ func (p Pawn) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 		},
 	)
 
-	if p.position.X == 1 || p.position.X == g.Dimensions-1 {
+	if p.position.X == 1 || p.position.X == g.GetDimensions()-1 {
 		moves = append(moves, grid.Cell{
 			Coordinates: grid.Coordinates{
 				X: p.position.X + 2,

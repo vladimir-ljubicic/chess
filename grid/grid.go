@@ -6,13 +6,13 @@ import (
 
 type Grid struct {
 	cells      []Cell
-	Dimensions int
+	dimensions int
 }
 
 func NewGrid(dimensions int) Grid {
 	grid := Grid{
 		cells:      make([]Cell, dimensions*dimensions),
-		Dimensions: dimensions,
+		dimensions: dimensions,
 	}
 
 	grid.initCoordinates()
@@ -32,11 +32,15 @@ func (g Grid) initCoordinates() {
 		}
 		y++
 
-		if (i+1)%g.Dimensions == 0 {
+		if (i+1)%g.dimensions == 0 {
 			x++
 			y = 0
 		}
 	}
+}
+
+func (g Grid) GetDimensions() int {
+	return g.dimensions
 }
 
 func (g Grid) GetRow(index int) []Cell {
@@ -101,5 +105,5 @@ func (g Grid) GetDiagonals(c Cell) []Cell {
 }
 
 func (g Grid) IsValidCell(c Cell) bool {
-	return c.X >= 0 && c.Y >= 0 && c.X < g.Dimensions && c.Y < g.Dimensions
+	return c.X >= 0 && c.Y >= 0 && c.X < g.dimensions && c.Y < g.dimensions
 }
