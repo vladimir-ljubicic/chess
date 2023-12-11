@@ -13,4 +13,6 @@ const (
 
 type Piece interface {
 	GetLegalMoves(g grid.Grid) []grid.Cell
+	GetPosition() grid.Cell
+	GetColor() Color
 }

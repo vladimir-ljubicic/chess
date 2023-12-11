@@ -7,15 +7,15 @@ import (
 )
 
 type Knight struct {
-	Color      piece.Color
-	Position   grid.Cell
+	color      piece.Color
+	position   grid.Cell
 	LegalMoves []grid.Cell
 }
 
 func New(startPosition grid.Coordinates, color piece.Color) Knight {
 	return Knight{
-		Color:      color,
-		Position:   grid.Cell{Coordinates: startPosition},
+		color:      color,
+		position:   grid.Cell{Coordinates: startPosition},
 		LegalMoves: nil,
 	}
 }
@@ -23,14 +23,14 @@ func New(startPosition grid.Coordinates, color piece.Color) Knight {
 func (k Knight) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 
 	moves = append(moves,
-		k.Position.GoUp().GoUp().GoLeft(),
-		k.Position.GoUp().GoUp().GoRight(),
-		k.Position.GoDown().GoDown().GoLeft(),
-		k.Position.GoDown().GoDown().GoRight(),
-		k.Position.GoLeft().GoLeft().GoUp(),
-		k.Position.GoLeft().GoLeft().GoDown(),
-		k.Position.GoRight().GoRight().GoUp(),
-		k.Position.GoRight().GoRight().GoDown(),
+		k.position.Up().Up().Left(),
+		k.position.Up().Up().Right(),
+		k.position.Down().Down().Left(),
+		k.position.Down().Down().Right(),
+		k.position.Left().Left().Up(),
+		k.position.Left().Left().Down(),
+		k.position.Right().Right().Up(),
+		k.position.Right().Right().Down(),
 	)
 
 	//	Filter out invalid cells
@@ -39,4 +39,12 @@ func (k Knight) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 	})
 
 	return moves
+}
+
+func (k Knight) GetPosition() grid.Cell {
+	return k.position
+}
+
+func (k Knight) GetColor() piece.Color {
+	return k.color
 }

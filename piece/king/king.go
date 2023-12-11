@@ -6,15 +6,15 @@ import (
 )
 
 type King struct {
-	Color      piece.Color
-	Position   grid.Cell
+	color      piece.Color
+	position   grid.Cell
 	LegalMoves []grid.Cell
 }
 
 func New(startPosition grid.Coordinates, color piece.Color) King {
 	return King{
-		Color:      color,
-		Position:   grid.Cell{Coordinates: startPosition},
+		color:      color,
+		position:   grid.Cell{Coordinates: startPosition},
 		LegalMoves: nil,
 	}
 }
@@ -24,4 +24,12 @@ func (k King) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 	//	to check if any other opposing piece has kings destination as a Legal move.
 
 	return moves
+}
+
+func (k King) GetPosition() grid.Cell {
+	return k.position
+}
+
+func (k King) GetColor() piece.Color {
+	return k.color
 }

@@ -6,15 +6,15 @@ import (
 )
 
 type Pawn struct {
-	Color      piece.Color
-	Position   grid.Cell
+	color      piece.Color
+	position   grid.Cell
 	LegalMoves []grid.Cell
 }
 
 func New(startPosition grid.Coordinates, color piece.Color) Pawn {
 	return Pawn{
-		Color:      color,
-		Position:   grid.Cell{Coordinates: startPosition},
+		color:      color,
+		position:   grid.Cell{Coordinates: startPosition},
 		LegalMoves: nil,
 	}
 }
@@ -24,32 +24,40 @@ func (p Pawn) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 		moves,
 		grid.Cell{
 			Coordinates: grid.Coordinates{
-				X: p.Position.X + 1,
-				Y: p.Position.Y,
+				X: p.position.X + 1,
+				Y: p.position.Y,
 			},
 		},
 		grid.Cell{
 			Coordinates: grid.Coordinates{
-				X: p.Position.X + 1,
-				Y: p.Position.Y - 1,
+				X: p.position.X + 1,
+				Y: p.position.Y - 1,
 			},
 		},
 		grid.Cell{
 			Coordinates: grid.Coordinates{
-				X: p.Position.X + 1,
-				Y: p.Position.Y + 1,
+				X: p.position.X + 1,
+				Y: p.position.Y + 1,
 			},
 		},
 	)
 
-	if p.Position.X == 1 || p.Position.X == g.Dimensions-1 {
+	if p.position.X == 1 || p.position.X == g.Dimensions-1 {
 		moves = append(moves, grid.Cell{
 			Coordinates: grid.Coordinates{
-				X: p.Position.X + 2,
-				Y: p.Position.Y,
+				X: p.position.X + 2,
+				Y: p.position.Y,
 			},
 		})
 	}
 
 	return moves
+}
+
+func (p Pawn) GetPosition() grid.Cell {
+	return p.position
+}
+
+func (p Pawn) GetColor() piece.Color {
+	return p.color
 }
