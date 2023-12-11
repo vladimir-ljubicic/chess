@@ -9,22 +9,22 @@ type Cell struct {
 	Coordinates
 }
 
-func (c Cell) GoUp() Cell {
+func (c Cell) Up() Cell {
 	c.X++
 	return c
 }
 
-func (c Cell) GoDown() Cell {
+func (c Cell) Down() Cell {
 	c.X--
 	return c
 }
 
-func (c Cell) GoRight() Cell {
+func (c Cell) Right() Cell {
 	c.Y++
 	return c
 }
 
-func (c Cell) GoLeft() Cell {
+func (c Cell) Left() Cell {
 	c.Y--
 	return c
 }

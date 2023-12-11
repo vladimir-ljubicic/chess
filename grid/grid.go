@@ -55,7 +55,7 @@ func (g Grid) GetDiagonals(c Cell) []Cell {
 	var diagonalCells []Cell
 	nextCell := c
 	for {
-		nextCell = nextCell.GoUp().GoRight()
+		nextCell = nextCell.Up().Right()
 
 		if g.IsValidCell(nextCell) {
 			diagonalCells = append(diagonalCells, nextCell)
@@ -66,7 +66,7 @@ func (g Grid) GetDiagonals(c Cell) []Cell {
 
 	nextCell = c
 	for {
-		nextCell = nextCell.GoDown().GoLeft()
+		nextCell = nextCell.Down().Left()
 
 		if g.IsValidCell(nextCell) {
 			diagonalCells = append(diagonalCells, nextCell)
@@ -77,7 +77,7 @@ func (g Grid) GetDiagonals(c Cell) []Cell {
 
 	nextCell = c
 	for {
-		nextCell = nextCell.GoUp().GoLeft()
+		nextCell = nextCell.Up().Left()
 
 		if g.IsValidCell(nextCell) {
 			diagonalCells = append(diagonalCells, nextCell)
@@ -88,7 +88,7 @@ func (g Grid) GetDiagonals(c Cell) []Cell {
 
 	nextCell = c
 	for {
-		nextCell = nextCell.GoDown().GoRight()
+		nextCell = nextCell.Down().Right()
 
 		if g.IsValidCell(nextCell) {
 			diagonalCells = append(diagonalCells, nextCell)
