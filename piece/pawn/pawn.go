@@ -1,6 +1,7 @@
 package pawn
 
 import (
+	"github.com/chess/board"
 	"github.com/chess/grid"
 	"github.com/chess/piece"
 )
@@ -19,36 +20,22 @@ func New(startPosition grid.Coordinates, color piece.Color) Pawn {
 	}
 }
 
-func (p Pawn) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
-	moves = append(
-		moves,
-		grid.Cell{
-			Coordinates: grid.Coordinates{
-				X: p.position.X + 1,
-				Y: p.position.Y,
-			},
-		},
-		grid.Cell{
-			Coordinates: grid.Coordinates{
-				X: p.position.X + 1,
-				Y: p.position.Y - 1,
-			},
-		},
-		grid.Cell{
-			Coordinates: grid.Coordinates{
-				X: p.position.X + 1,
-				Y: p.position.Y + 1,
-			},
-		},
-	)
+func (p Pawn) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+	moves = append(moves, p.position.Up())
 
-	if p.position.X == 1 || p.position.X == g.GetDimensions()-1 {
-		moves = append(moves, grid.Cell{
-			Coordinates: grid.Coordinates{
-				X: p.position.X + 2,
-				Y: p.position.Y,
-			},
-		})
+	piece := b.GetPieceOn(p.position.Up().Left())
+	if piece != nil && (*piece).GetColor() != p.color {
+		moves = append(moves, p.position.Up().Left())
+	}
+
+	piece = b.GetPieceOn(p.position.Up().Right())
+	if piece != nil && (*piece).GetColor() != p.color {
+		moves = append(moves, p.position.Up().Right())
+	}
+
+	//	figure out how to distinguish white from black moves here
+	if p.position.X == 1 || p.position.X == b.Grid.GetDimensions()-2 {
+		moves = append(moves, p.position.Up().Up())
 	}
 
 	return moves

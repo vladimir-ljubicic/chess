@@ -1,9 +1,10 @@
 package queen
 
 import (
+	"fmt"
+	"github.com/chess/board"
 	"github.com/chess/grid"
 	"github.com/chess/piece"
-	"github.com/samber/lo"
 )
 
 type Queen struct {
@@ -20,21 +21,57 @@ func New(startPosition grid.Coordinates, color piece.Color) Queen {
 	}
 }
 
-func (q Queen) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
-	row := g.GetRow(q.position.X)
-	moves = append(moves, row...)
+func (q Queen) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+	for _, direction := range grid.Directions {
+		move, found := grid.Movements[direction]
+		if !found {
+			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
+		}
 
-	column := g.GetColumn(q.position.Y)
-	moves = append(moves, column...)
+		p := q.position
+		for {
+			p = move(p)
 
-	diagonals := g.GetDiagonals(q.position)
-	moves = append(moves, diagonals...)
+			if !b.Grid.IsValidCell(p) {
+				break
+			}
 
-	//	Filter out current grid position
-	moves = lo.Filter(moves, func(c grid.Cell, _ int) bool {
-		return c.Coordinates != q.position.Coordinates
-	})
+			if encountered := b.GetPieceOn(p); encountered != nil {
+				if (*encountered).GetColor() != q.color {
+					moves = append(moves, p)
+				}
+				break
+			}
 
+			moves = append(moves, p)
+		}
+	}
+
+	for _, diagonalDirection := range grid.DiagonalDirections {
+		move, found := grid.DiagonalMovements[diagonalDirection]
+		if !found {
+			panic(fmt.Sprintf("No movement method for specified diagonal direction: %s", diagonalDirection))
+		}
+
+		p := q.position
+		for {
+			p = move(p)
+
+			if !b.Grid.IsValidCell(p) {
+				break
+			}
+
+			if encountered := b.GetPieceOn(p); encountered != nil {
+				if (*encountered).GetColor() != q.color {
+					moves = append(moves, p)
+				}
+				break
+			}
+
+			moves = append(moves, p)
+		}
+	}
+	
 	return moves
 }
 

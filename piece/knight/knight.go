@@ -1,6 +1,7 @@
 package knight
 
 import (
+	"github.com/chess/board"
 	"github.com/chess/grid"
 	"github.com/chess/piece"
 	"github.com/samber/lo"
@@ -20,8 +21,7 @@ func New(startPosition grid.Coordinates, color piece.Color) Knight {
 	}
 }
 
-func (k Knight) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
-
+func (k Knight) GetLegalMoves(b board.Board) (moves []grid.Cell) {
 	moves = append(moves,
 		k.position.Up().Up().Left(),
 		k.position.Up().Up().Right(),
@@ -35,7 +35,15 @@ func (k Knight) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
 
 	//	Filter out invalid cells
 	moves = lo.Filter(moves, func(c grid.Cell, _ int) bool {
-		return g.IsValidCell(c)
+		if !b.Grid.IsValidCell(c) {
+			return false
+		}
+
+		if piece := b.GetPieceOn(c); piece != nil && (*piece).GetColor() == k.color {
+			return false
+		}
+
+		return true
 	})
 
 	return moves

@@ -1,10 +1,10 @@
 package rook
 
 import (
+	"fmt"
 	"github.com/chess/board"
 	"github.com/chess/grid"
 	"github.com/chess/piece"
-	"github.com/samber/lo"
 )
 
 type Rook struct {
@@ -23,18 +23,31 @@ func New(startPosition grid.Coordinates, color piece.Color) Rook {
 	}
 }
 
-func (r Rook) GetLegalMoves(g grid.Grid) (moves []grid.Cell) {
-	row := g.GetRow(r.Position.X)
-	row := g.GetRow(r.position.X)
-	moves = append(moves, row...)
+func (r Rook) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+	for _, direction := range grid.Directions {
+		move, found := grid.Movements[direction]
+		if !found {
+			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
+		}
 
-	column := g.GetColumn(r.position.Y)
-	moves = append(moves, column...)
+		p := r.position
+		for {
+			p = move(p)
 
-	//	Filter out current grid position
-	moves = lo.Filter(moves, func(c grid.Cell, _ int) bool {
-		return c.Coordinates != r.position.Coordinates
-	})
+			if !b.Grid.IsValidCell(p) {
+				break
+			}
+
+			if encountered := b.GetPieceOn(p); encountered != nil {
+				if (*encountered).GetColor() != r.color {
+					moves = append(moves, p)
+				}
+				break
+			}
+
+			moves = append(moves, p)
+		}
+	}
 
 	return moves
 }

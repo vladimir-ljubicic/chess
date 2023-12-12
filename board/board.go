@@ -3,20 +3,27 @@ package board
 import (
 	"github.com/chess/grid"
 	"github.com/chess/piece"
+	"github.com/samber/lo"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
+type Player int
+
+const (
+	White Player = iota
+	Black
+)
+
 type Board struct {
-	grid   grid.Grid
+	Grid   grid.Grid
 	Pieces []piece.Piece
 }
 
 func NewBoard(pieceSchema string) Board {
-
 	return Board{
-		grid:   grid.NewGrid(8),
+		Grid:   grid.NewGrid(8),
 		Pieces: nil,
 	}
 }
@@ -57,17 +64,31 @@ func ToGridCell(space string) *grid.Cell {
 		}}
 }
 
-type Player int
-
-const (
-	White Player = iota
-	Black
-)
-
-func (b Board) IsInCheck(color Player) {
-	//king := lo.Find()
-	//opposingPieces := lo.Filter(b.Pieces, func(p piece.Piece, _ int)bool{
-	//	return b.
+func (b Board) IsInCheck(player piece.Color) bool {
+	//king, _ := lo.Find(b.Pieces, func(piece piece.Piece) bool {
+	//	king, isKing := piece.(king.King)
+	//
+	//	return isKing && king.GetColor() == player
 	//})
-	//for _, piece := range b.Pieces
+	//
+	//opposingPieces := lo.Filter(b.Pieces, func(p piece.Piece, _ int) bool {
+	//	return p.GetColor() != player
+	//})
+	//for _, piece := range opposingPieces {
+	//	if lo.Contains(piece.GetLegalMoves(b), king.GetPosition()) {
+	//		return true
+	//	}
+	//}
+
+	return false
+}
+
+func (b Board) GetPieceOn(c grid.Cell) *piece.Piece {
+	if p, found := lo.Find(b.Pieces, func(piece piece.Piece) bool {
+		return piece.GetPosition() == c
+	}); found {
+		return &p
+	}
+
+	return nil
 }
