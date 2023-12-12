@@ -1,9 +1,5 @@
 package grid
 
-import (
-	"github.com/samber/lo"
-)
-
 type Grid struct {
 	cells      []Cell
 	dimensions int
@@ -41,67 +37,6 @@ func (g Grid) initCoordinates() {
 
 func (g Grid) GetDimensions() int {
 	return g.dimensions
-}
-
-func (g Grid) GetRow(index int) []Cell {
-	return lo.Filter(g.cells, func(cell Cell, _ int) bool {
-		return cell.Coordinates.X == index
-	})
-}
-
-func (g Grid) GetColumn(index int) []Cell {
-	return lo.Filter(g.cells, func(cell Cell, _ int) bool {
-		return cell.Coordinates.Y == index
-	})
-}
-
-func (g Grid) GetDiagonals(c Cell) []Cell {
-	var diagonalCells []Cell
-	nextCell := c
-	for {
-		nextCell = nextCell.Up().Right()
-
-		if g.IsValidCell(nextCell) {
-			diagonalCells = append(diagonalCells, nextCell)
-		} else {
-			break
-		}
-	}
-
-	nextCell = c
-	for {
-		nextCell = nextCell.Down().Left()
-
-		if g.IsValidCell(nextCell) {
-			diagonalCells = append(diagonalCells, nextCell)
-		} else {
-			break
-		}
-	}
-
-	nextCell = c
-	for {
-		nextCell = nextCell.Up().Left()
-
-		if g.IsValidCell(nextCell) {
-			diagonalCells = append(diagonalCells, nextCell)
-		} else {
-			break
-		}
-	}
-
-	nextCell = c
-	for {
-		nextCell = nextCell.Down().Right()
-
-		if g.IsValidCell(nextCell) {
-			diagonalCells = append(diagonalCells, nextCell)
-		} else {
-			break
-		}
-	}
-
-	return diagonalCells
 }
 
 func (g Grid) IsValidCell(c Cell) bool {
