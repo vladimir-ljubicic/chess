@@ -3,59 +3,37 @@ package rook
 import (
 	"fmt"
 	"github.com/chess/board"
-	"github.com/chess/grid"
+	"github.com/chess/board/grid"
 	"github.com/chess/piece"
 )
 
-type Rook struct {
-	color      piece.Color
-	position   grid.Cell
-	LegalMoves []grid.Cell
-}
+type Rook struct{}
 
-func New(startPosition grid.Coordinates, color piece.Color) Rook {
-	return Rook{
-		color: color,
-		position: grid.Cell{
-			Coordinates: startPosition,
-		},
-		LegalMoves: nil,
-	}
-}
-
-func (r Rook) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+func (r Rook) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
 	for _, direction := range grid.Directions {
 		move, found := grid.Movements[direction]
 		if !found {
 			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
 		}
 
-		p := r.position
+		x := p.Position
 		for {
-			p = move(p)
+			x = move(x)
 
-			if !b.Grid.IsValidCell(p) {
+			if !b.Grid.IsValidCell(x) {
 				break
 			}
 
-			if encountered := b.GetPieceOn(p); encountered != nil {
-				if (*encountered).GetColor() != r.color {
-					moves = append(moves, p)
+			if encountered := b.GetPieceOn(x); encountered != nil {
+				if (*encountered).Color != p.Color {
+					moves = append(moves, x)
 				}
 				break
 			}
 
-			moves = append(moves, p)
+			moves = append(moves, x)
 		}
 	}
 
 	return moves
-}
-
-func (r Rook) GetPosition() grid.Cell {
-	return r.position
-}
-
-func (r Rook) GetColor() piece.Color {
-	return r.color
 }

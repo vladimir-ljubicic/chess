@@ -3,47 +3,35 @@ package queen
 import (
 	"fmt"
 	"github.com/chess/board"
-	"github.com/chess/grid"
+	"github.com/chess/board/grid"
 	"github.com/chess/piece"
 )
 
-type Queen struct {
-	color      piece.Color
-	position   grid.Cell
-	LegalMoves []grid.Cell
-}
+type Queen struct{}
 
-func New(startPosition grid.Coordinates, color piece.Color) Queen {
-	return Queen{
-		color:      color,
-		position:   grid.Cell{Coordinates: startPosition},
-		LegalMoves: nil,
-	}
-}
-
-func (q Queen) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+func (q Queen) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
 	for _, direction := range grid.Directions {
 		move, found := grid.Movements[direction]
 		if !found {
 			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
 		}
 
-		p := q.position
+		x := p.Position
 		for {
-			p = move(p)
+			x = move(x)
 
-			if !b.Grid.IsValidCell(p) {
+			if !b.Grid.IsValidCell(x) {
 				break
 			}
 
-			if encountered := b.GetPieceOn(p); encountered != nil {
-				if (*encountered).GetColor() != q.color {
-					moves = append(moves, p)
+			if encountered := b.GetPieceOn(x); encountered != nil {
+				if (*encountered).Color != p.Color {
+					moves = append(moves, x)
 				}
 				break
 			}
 
-			moves = append(moves, p)
+			moves = append(moves, x)
 		}
 	}
 
@@ -53,32 +41,24 @@ func (q Queen) GetLegalMoves(b board.Board) (moves []grid.Cell) {
 			panic(fmt.Sprintf("No movement method for specified diagonal direction: %s", diagonalDirection))
 		}
 
-		p := q.position
+		x := p.Position
 		for {
-			p = move(p)
+			x = move(x)
 
-			if !b.Grid.IsValidCell(p) {
+			if !b.Grid.IsValidCell(x) {
 				break
 			}
 
-			if encountered := b.GetPieceOn(p); encountered != nil {
-				if (*encountered).GetColor() != q.color {
-					moves = append(moves, p)
+			if encountered := b.GetPieceOn(x); encountered != nil {
+				if (*encountered).Color != p.Color {
+					moves = append(moves, x)
 				}
 				break
 			}
 
-			moves = append(moves, p)
+			moves = append(moves, x)
 		}
 	}
-	
+
 	return moves
-}
-
-func (q Queen) GetPosition() grid.Cell {
-	return q.position
-}
-
-func (q Queen) GetColor() piece.Color {
-	return q.color
 }

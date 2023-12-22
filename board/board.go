@@ -1,7 +1,7 @@
 package board
 
 import (
-	"github.com/chess/grid"
+	"github.com/chess/board/grid"
 	"github.com/chess/piece"
 	"github.com/samber/lo"
 	"regexp"
@@ -9,12 +9,9 @@ import (
 	"strings"
 )
 
-type Player int
-
-const (
-	White Player = iota
-	Black
-)
+type Mover interface {
+	GetLegalMoves(p piece.Piece, b Board) []grid.Cell
+}
 
 type Board struct {
 	Grid   grid.Grid
@@ -85,7 +82,7 @@ func (b Board) IsInCheck(player piece.Color) bool {
 
 func (b Board) GetPieceOn(c grid.Cell) *piece.Piece {
 	if p, found := lo.Find(b.Pieces, func(piece piece.Piece) bool {
-		return piece.GetPosition() == c
+		return piece.Position == c
 	}); found {
 		return &p
 	}

@@ -1,7 +1,7 @@
 package piece
 
 import (
-	"github.com/chess/grid"
+	"github.com/chess/board/grid"
 )
 
 type Color int
@@ -11,8 +11,20 @@ const (
 	Black
 )
 
-type Piece interface {
-	GetLegalMoves(g grid.Grid) []grid.Cell
-	GetPosition() grid.Cell
-	GetColor() Color
+type Type int
+
+const (
+	King Type = iota
+	Queen
+	Rook
+	Bishop
+	Knight
+	Pawn
+)
+
+type Piece struct {
+	Type       Type
+	Color      Color
+	Position   grid.Cell
+	LegalMoves []grid.Cell
 }

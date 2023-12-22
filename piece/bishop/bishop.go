@@ -3,57 +3,37 @@ package bishop
 import (
 	"fmt"
 	"github.com/chess/board"
-	"github.com/chess/grid"
+	"github.com/chess/board/grid"
 	"github.com/chess/piece"
 )
 
-type Bishop struct {
-	color      piece.Color
-	position   grid.Cell
-	LegalMoves []grid.Cell
-}
+type Bishop struct{}
 
-func New(startPosition grid.Coordinates, color piece.Color) Bishop {
-	return Bishop{
-		color:      color,
-		position:   grid.Cell{Coordinates: startPosition},
-		LegalMoves: nil,
-	}
-}
-
-func (bs Bishop) GetLegalMoves(b board.Board) (moves []grid.Cell) {
+func (bs Bishop) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
 	for _, diagonalDirection := range grid.DiagonalDirections {
 		move, found := grid.DiagonalMovements[diagonalDirection]
 		if !found {
 			panic(fmt.Sprintf("No movement method for specified diagonal direction: %s", diagonalDirection))
 		}
 
-		p := bs.position
+		x := p.Position
 		for {
-			p = move(p)
+			x = move(x)
 
-			if !b.Grid.IsValidCell(p) {
+			if !b.Grid.IsValidCell(x) {
 				break
 			}
 
-			if encountered := b.GetPieceOn(p); encountered != nil {
-				if (*encountered).GetColor() != bs.color {
-					moves = append(moves, p)
+			if encountered := b.GetPieceOn(x); encountered != nil {
+				if (*encountered).Color != p.Color {
+					moves = append(moves, x)
 				}
 				break
 			}
 
-			moves = append(moves, p)
+			moves = append(moves, x)
 		}
 	}
 
 	return moves
-}
-
-func (bs Bishop) GetPosition() grid.Cell {
-	return bs.position
-}
-
-func (bs Bishop) GetColor() piece.Color {
-	return bs.color
 }
