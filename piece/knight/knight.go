@@ -9,8 +9,8 @@ import (
 
 type Knight struct{}
 
-func (k Knight) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
-	moves = append(moves,
+func (k Knight) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+	moves := []grid.Cell{
 		p.Position.Up().Up().Left(),
 		p.Position.Up().Up().Right(),
 		p.Position.Down().Down().Left(),
@@ -19,7 +19,7 @@ func (k Knight) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) 
 		p.Position.Left().Left().Down(),
 		p.Position.Right().Right().Up(),
 		p.Position.Right().Right().Down(),
-	)
+	}
 
 	//	Filter out invalid cells
 	moves = lo.Filter(moves, func(c grid.Cell, _ int) bool {
@@ -34,5 +34,5 @@ func (k Knight) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) 
 		return true
 	})
 
-	return moves
+	p.LegalMoves = moves
 }

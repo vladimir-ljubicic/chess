@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-type Mover interface {
-	GetLegalMoves(p piece.Piece, b Board) []grid.Cell
+type MovementEngine interface {
+	UpdateLegalMoves(p *piece.Piece, b Board)
 }
 
 type Board struct {
@@ -72,7 +72,7 @@ func (b Board) IsInCheck(player piece.Color) bool {
 	//	return p.GetColor() != player
 	//})
 	//for _, piece := range opposingPieces {
-	//	if lo.Contains(piece.GetLegalMoves(b), king.GetPosition()) {
+	//	if lo.Contains(piece.UpdateLegalMoves(b), king.GetPosition()) {
 	//		return true
 	//	}
 	//}

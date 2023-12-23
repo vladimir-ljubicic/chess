@@ -8,7 +8,8 @@ import (
 
 type Pawn struct{}
 
-func (pw Pawn) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
+func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+	var moves []grid.Cell
 	moves = append(moves, p.Position.Up())
 
 	piece := b.GetPieceOn(p.Position.Up().Left())
@@ -26,5 +27,5 @@ func (pw Pawn) GetLegalMoves(p piece.Piece, b board.Board) (moves []grid.Cell) {
 		moves = append(moves, p.Position.Up().Up())
 	}
 
-	return moves
+	p.LegalMoves = moves
 }
