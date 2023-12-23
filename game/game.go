@@ -6,9 +6,16 @@ import (
 	"time"
 )
 
+type PieceMove struct {
+	Piece piece.Piece
+	From  grid.Cell
+	To    grid.Cell
+}
+
 type Game struct {
-	Board   board.Board
-	Players []*player.Player
+	Board    board.Board
+	Players  []*player.Player
+	MoveList []PieceMove
 }
 
 type GameOptions struct {
