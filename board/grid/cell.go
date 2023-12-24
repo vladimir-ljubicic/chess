@@ -32,22 +32,22 @@ const (
 var DiagonalDirections = []DiagonalDirection{RightAscending, RightDescending, LeftAscending, LeftDescending}
 
 func (c Cell) Up() Cell {
-	c.X++
-	return c
-}
-
-func (c Cell) Down() Cell {
-	c.X--
-	return c
-}
-
-func (c Cell) Right() Cell {
 	c.Y++
 	return c
 }
 
-func (c Cell) Left() Cell {
+func (c Cell) Down() Cell {
 	c.Y--
+	return c
+}
+
+func (c Cell) Right() Cell {
+	c.X++
+	return c
+}
+
+func (c Cell) Left() Cell {
+	c.X--
 	return c
 }
 
