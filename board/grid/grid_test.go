@@ -159,3 +159,29 @@ func TestGrid_GetMedialCells(t *testing.T) {
 		})
 	}
 }
+
+func TestGrid_IsValidCell(t *testing.T) {
+	g := NewGrid(3)
+
+	assert.True(t, g.IsValidCell(Cell{
+		Coordinates{
+			X: 2,
+			Y: 2,
+		},
+	}))
+
+	assert.False(t, g.IsValidCell(Cell{
+		Coordinates{
+			X: 3,
+			Y: 2,
+		},
+	}))
+
+	assert.False(t, g.IsValidCell(Cell{
+		Coordinates{
+			X: 2,
+			Y: 3,
+		},
+	}))
+
+}
