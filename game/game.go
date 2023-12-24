@@ -64,3 +64,24 @@ func NewGame(options ...GameOption) Game {
 		},
 	}
 }
+
+func (g Game) IsInCheck(c player.Color) bool {
+	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
+		return p.Color == piece.Color(c) && p.Type == piece.King
+	})
+	if !found {
+		panic("King not found")
+	}
+
+	opposingPieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
+		return p.Color != piece.Color(c)
+	})
+
+	for _, op := range opposingPieces {
+		if lo.Contains(op.LegalMoves, k.Position) {
+			return true
+		}
+	}
+
+	return false
+}
