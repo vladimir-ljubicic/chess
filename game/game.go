@@ -65,6 +65,103 @@ func NewGame(options ...GameOption) Game {
 	}
 }
 
+
+func (g Game) PinnedPiecesUpdateMoves(c player.Color) {
+	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
+		return p.Color == piece.Color(c) && p.Type == piece.King
+	})
+	if !found {
+		panic("King not found")
+	}
+
+	for _, direction := range grid.Directions {
+		var encounteredPieces []*piece.Piece
+		move, found := grid.Movements[direction]
+		if !found {
+			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
+		}
+
+		x := k.Position
+		for {
+			x = move(x)
+
+			if !g.Board.Grid.IsValidCell(x) {
+				break
+			}
+
+			if encountered := g.Board.GetPieceOn(x); encountered != nil {
+				encounteredPieces = append(encounteredPieces, encountered)
+				if len(encounteredPieces) == 2 {
+					break
+				}
+			}
+		}
+
+		if len(encounteredPieces) < 2 || encounteredPieces[0].Color != k.Color || encounteredPieces[1].Color == k.Color {
+			continue
+		}
+
+		if encounteredPieces[1].Type == piece.Queen || encounteredPieces[1].Type == piece.Rook {
+			encounteredPieces[0].LegalMoves = lo.Filter(encounteredPieces[0].LegalMoves,
+				func(c grid.Cell, _ int) bool {
+					if direction == grid.Right || direction == grid.Left {
+						return c.Y == k.Position.Y
+					} else {
+						return c.X == k.Position.X
+					}
+				})
+		}
+
+	}
+
+	for _, direction := range grid.DiagonalDirections {
+		var encounteredPieces []*piece.Piece
+		move, found := grid.DiagonalMovements[direction]
+		if !found {
+			panic(fmt.Sprintf("No movement method for specified direction: %s", direction))
+		}
+
+		x := k.Position
+		for {
+			x = move(x)
+
+			if !g.Board.Grid.IsValidCell(x) {
+				break
+			}
+
+			if encountered := g.Board.GetPieceOn(x); encountered != nil {
+				encounteredPieces = append(encounteredPieces, encountered)
+				if len(encounteredPieces) == 2 {
+					break
+				}
+			}
+		}
+
+		if len(encounteredPieces) < 2 || encounteredPieces[0].Color != k.Color || encounteredPieces[1].Color == k.Color {
+			continue
+		}
+
+		if encounteredPieces[1].Type == piece.Queen || encounteredPieces[1].Type == piece.Bishop {
+			encounteredPieces[0].LegalMoves = lo.Filter(encounteredPieces[0].LegalMoves,
+				func(c grid.Cell, _ int) bool {
+					switch direction {
+					case grid.RightAscending:
+						return c.X > k.Position.X && c.Y > k.Position.Y && c.X-k.Position.X == c.Y-k.Position.Y
+					case grid.RightDescending:
+						return c.X > k.Position.X && c.Y < k.Position.Y && c.X-k.Position.X*-1 == c.Y-k.Position.Y
+					case grid.LeftAscending:
+						return c.X < k.Position.X && c.Y > k.Position.Y && c.X-k.Position.X*-1 == c.Y-k.Position.Y
+					case grid.LeftDescending:
+						return c.X < k.Position.X && c.Y < k.Position.Y && c.X-k.Position.X == c.Y-k.Position.Y
+					default:
+						return false
+					}
+				})
+		}
+
+	}
+}
+
 func (g Game) IsInCheck(c player.Color) bool {
 	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
 		return p.Color == piece.Color(c) && p.Type == piece.King
