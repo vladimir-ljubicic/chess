@@ -3,13 +3,12 @@ package pawn
 import (
 	"github.com/chess/board"
 	"github.com/chess/board/grid"
-	"github.com/chess/game"
 	"github.com/chess/piece"
 	"github.com/samber/lo"
 )
 
 type Pawn struct {
-	moveList []game.PieceMove
+	moveList []piece.Move
 }
 
 func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
@@ -81,7 +80,7 @@ func isPawnStartingPosition(c piece.Color, cell grid.Cell) bool {
 	}
 }
 
-func isDoubleMove(move game.PieceMove) bool {
+func isDoubleMove(move piece.Move) bool {
 	if isPawnStartingPosition(move.Piece.Color, move.From) {
 		return false
 	}
