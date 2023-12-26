@@ -23,6 +23,10 @@ func (k King) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		p.Position.Down().Left(),
 	)
 
+	moves = lo.Filter(moves, func(m grid.Cell, _ int) bool {
+		return b.Grid.IsValidCell(m)
+	})
+
 	opposingPieces := lo.Filter(b.Pieces, func(pc piece.Piece, _ int) bool {
 		return pc.Color != p.Color
 	})
