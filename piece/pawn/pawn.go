@@ -54,20 +54,21 @@ func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	lastMove, err := lo.Last(pw.moveList)
-	if err != nil {
-		panic(err)
-	}
+	if len(pw.moveList) > 0 {
+		lastMove, err := lo.Last(pw.moveList)
+		if err != nil {
+			panic(err)
+		}
 
-	//	capture "en passant"
-	if isDoubleMove(lastMove) && areAdjacentPawns(p.Position, lastMove.Piece.Position) {
-		if lastMove.Piece.Position.X < p.Position.X {
-			moves = append(moves, p.Position.Up().Left())
-		} else {
-			moves = append(moves, p.Position.Up().Right())
+		//	capture "en passant"
+		if isDoubleMove(lastMove) && areAdjacentPawns(p.Position, lastMove.Piece.Position) {
+			if lastMove.Piece.Position.X < p.Position.X {
+				moves = append(moves, p.Position.Up().Left())
+			} else {
+				moves = append(moves, p.Position.Up().Right())
+			}
 		}
 	}
-	// we need to clear captured pieces off the board, this applies to all other scenarios as well
 
 	p.LegalMoves = moves
 }
