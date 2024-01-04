@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type MovementEngine interface {
+type Movable interface {
 	UpdateLegalMoves(p *piece.Piece, b Board)
 }
 
@@ -59,25 +59,6 @@ func ToGridCell(space string) *grid.Cell {
 			X: row,
 			Y: column + 1,
 		}}
-}
-
-func (b Board) IsInCheck(player piece.Color) bool {
-	//king, _ := lo.Find(b.Pieces, func(piece piece.Piece) bool {
-	//	king, isKing := piece.(king.King)
-	//
-	//	return isKing && king.GetColor() == player
-	//})
-	//
-	//opposingPieces := lo.Filter(b.Pieces, func(p piece.Piece, _ int) bool {
-	//	return p.GetColor() != player
-	//})
-	//for _, piece := range opposingPieces {
-	//	if lo.Contains(piece.UpdateLegalMoves(b), king.GetPosition()) {
-	//		return true
-	//	}
-	//}
-
-	return false
 }
 
 func (b Board) GetPieceOn(c grid.Cell) *piece.Piece {

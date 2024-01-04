@@ -65,6 +65,24 @@ func NewGame(options ...GameOption) Game {
 	}
 }
 
+func getMovable(t piece.Type, moveHistory []piece.Move) board.Movable {
+	switch t {
+	case piece.King:
+		return king.King{MoveHistory: moveHistory}
+	case piece.Queen:
+		return queen.Queen{}
+	case piece.Rook:
+		return rook.Rook{}
+	case piece.Bishop:
+		return bishop.Bishop{}
+	case piece.Knight:
+		return knight.Knight{}
+	case piece.Pawn:
+		return pawn.Pawn{MoveHistory: moveHistory}
+	default:
+		panic(fmt.Sprintf("Movement engine not found for piece type %d", t))
+	}
+}
 
 func (g Game) PinnedPiecesUpdateMoves(c player.Color) {
 	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
