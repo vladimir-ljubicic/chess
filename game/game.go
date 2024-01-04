@@ -205,5 +205,17 @@ func (g Game) IsInCheck(c player.Color) bool {
 		}
 	}
 
-	return false
+
+func (g Game) UpdateLegalMovesInParallel() {
+	var wg sync.WaitGroup
+	for _, p := range g.Board.Pieces {
+		wg.Add(1)
+		go func(p piece.Piece) {
+			defer wg.Done()
+			movable := getMovable(p.Type, g.MoveHistory)
+			movable.UpdateLegalMoves(&p, g.Board)
+			fmt.Println(p.Type, p.LegalMoves)
+		}(p)
+	}
+	wg.Wait()
 }
