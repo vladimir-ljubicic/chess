@@ -16,12 +16,14 @@ func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 
 	//	move once if vacant
 	if p.Color == piece.White {
-		if b.GetPieceOn(p.Position.Up()) == nil {
-			moves = append(moves, p.Position.Up())
+		up := p.Position.Up()
+		if b.Grid.IsValidCell(up) && b.GetPieceOn(up) == nil {
+			moves = append(moves, up)
 		}
 	} else {
-		if b.GetPieceOn(p.Position.Down()) == nil {
-			moves = append(moves, p.Position.Down())
+		down := p.Position.Down()
+		if b.Grid.IsValidCell(down) && b.GetPieceOn(down) == nil {
+			moves = append(moves, down)
 		}
 	}
 
