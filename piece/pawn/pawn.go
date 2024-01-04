@@ -8,7 +8,7 @@ import (
 )
 
 type Pawn struct {
-	moveList []piece.Move
+	MoveHistory []piece.Move
 }
 
 func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
@@ -56,8 +56,8 @@ func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	if len(pw.moveList) > 0 {
-		lastMove, err := lo.Last(pw.moveList)
+	if len(pw.MoveHistory) > 0 {
+		lastMove, err := lo.Last(pw.MoveHistory)
 		if err != nil {
 			panic(err)
 		}

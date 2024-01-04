@@ -13,9 +13,9 @@ type PieceMove struct {
 }
 
 type Game struct {
-	Board    board.Board
-	Players  []*player.Player
-	MoveList []PieceMove
+	Board       board.Board
+	Players     []*player.Player
+	MoveHistory []piece.Move
 }
 
 type GameOptions struct {

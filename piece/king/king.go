@@ -7,7 +7,9 @@ import (
 	"github.com/samber/lo"
 )
 
-type King struct{}
+type King struct {
+	MoveHistory []piece.Move
+}
 
 func (k King) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 	var moves []grid.Cell
