@@ -59,6 +59,19 @@ func NewGame(options ...GameOption) Game {
 	}
 }
 
+func (g Game) UpdateLegalMovesForPlayer(c player.Color) error {
+	pieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
+		return p.Color == piece.Color(c)
+	})
+
+	for _, piece := range pieces {
+		movable := getMovable(piece.Type, g.MoveHistory)
+		movable.UpdateLegalMoves(&piece, g.Board)
+	}
+
+	return nil
+}
+
 func getMovable(t piece.Type, moveHistory []piece.Move) board.Movable {
 	switch t {
 	case piece.King:
