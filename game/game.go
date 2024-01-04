@@ -1,8 +1,19 @@
 package game
 
 import (
+	"fmt"
 	"github.com/chess/board"
+	"github.com/chess/board/grid"
+	"github.com/chess/piece"
+	"github.com/chess/piece/bishop"
+	"github.com/chess/piece/king"
+	"github.com/chess/piece/knight"
+	"github.com/chess/piece/pawn"
+	"github.com/chess/piece/queen"
+	"github.com/chess/piece/rook"
 	"github.com/chess/player"
+	"github.com/samber/lo"
+	"sync"
 	"time"
 )
 
@@ -187,7 +198,41 @@ func (g Game) PinnedPiecesUpdateMoves(c player.Color) {
 	}
 }
 
-func (g Game) IsInCheck(c player.Color) bool {
+func (g Game) handleInCheck(payerInCheck player.Color, checkingPieces []piece.Piece) {
+	if len(checkingPieces) == 0 {
+		return
+	}
+	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
+		return p.Color == piece.Color(payerInCheck) && p.Type == piece.King
+	})
+	if !found {
+		panic("King not found")
+	}
+	//	If double-check
+	if len(checkingPieces) > 1 {
+		//	If king has no legal moves end the game
+		if len(k.LegalMoves) == 0 {
+			//g.End(lo.ToPtr(player.GetOpposingColor(payerInCheck)))
+		} else {
+			//	Otherwise clear legal moves of other pieces (king has to move)
+			lo.ForEach(g.Board.Pieces, func(p piece.Piece, _ int) {
+				if p.Color == k.Color {
+					p.LegalMoves = nil
+				}
+			})
+		}
+	} else {
+		//	Allow blocking moves only
+		lo.ForEach(g.Board.Pieces, func(p piece.Piece, _ int) {
+			if p.Color == k.Color {
+				medialSquares := grid.GetMedialCells(checkingPieces[0].Position, k.Position)
+				p.LegalMoves = lo.Intersect(medialSquares, p.LegalMoves)
+			}
+		})
+	}
+}
+
+func (g Game) IsInCheckBy(c player.Color) (checkingPieces []piece.Piece) {
 	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
 		return p.Color == piece.Color(c) && p.Type == piece.King
 	})
@@ -201,10 +246,12 @@ func (g Game) IsInCheck(c player.Color) bool {
 
 	for _, op := range opposingPieces {
 		if lo.Contains(op.LegalMoves, k.Position) {
-			return true
+			checkingPieces = append(checkingPieces, op)
 		}
 	}
 
+	return checkingPieces
+}
 
 func (g Game) UpdateLegalMovesInParallel() {
 	var wg sync.WaitGroup
