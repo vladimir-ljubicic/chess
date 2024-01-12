@@ -26,7 +26,6 @@ type Game struct {
 type GameOptions struct {
 	time        time.Duration
 	increment   time.Duration
-	toMove      player.Color
 	boardSchema string
 }
 
@@ -76,14 +75,14 @@ func (g Game) UpdateLegalMovesForPlayer(c player.Color) error {
 	})
 
 	for _, piece := range pieces {
-		movable := getMovable(piece.Type, g.MoveHistory)
+		movable := GetMovableForPieceType(piece.Type, g.MoveHistory)
 		movable.UpdateLegalMoves(&piece, g.Board)
 	}
 
 	return nil
 }
 
-func getMovable(t piece.Type, moveHistory []piece.Move) board.Movable {
+func GetMovableForPieceType(t piece.Type, moveHistory []piece.Move) board.Movable {
 	switch t {
 	case piece.King:
 		return king.King{MoveHistory: moveHistory}
@@ -102,7 +101,39 @@ func getMovable(t piece.Type, moveHistory []piece.Move) board.Movable {
 	}
 }
 
-func (g Game) PinnedPiecesUpdateMoves(c player.Color) {
+func (g Game) MovePiece(p *piece.Piece, moveTo grid.Cell) {
+	if !lo.Contains(p.LegalMoves, moveTo) {
+		return
+	}
+	// Capture
+	g.Board.Pieces = lo.Reject(g.Board.Pieces, func(i piece.Piece, _ int) bool {
+		return i.Position == moveTo
+	})
+
+	moveFrom := p.Position
+	p.Move(moveTo)
+
+	g.PostMoveActions(piece.Move{
+		Piece: *p,
+		From:  moveFrom,
+		To:    moveTo,
+	})
+}
+
+func (g Game) PostMoveActions(move piece.Move) {
+	g.AddToMoveHistory(move)
+
+	nextPlayer := player.Color(move.Piece.Color*-1 + 1)
+	g.UpdateLegalMovesInParallel(nextPlayer)
+	g.handleChecks(nextPlayer)
+	g.handlePinnedPieces(nextPlayer)
+}
+
+func (g Game) AddToMoveHistory(move piece.Move) {
+	g.MoveHistory = append(g.MoveHistory, move)
+}
+
+func (g Game) handlePinnedPieces(c player.Color) {
 	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
 		return p.Color == piece.Color(c) && p.Type == piece.King
 	})
@@ -198,21 +229,34 @@ func (g Game) PinnedPiecesUpdateMoves(c player.Color) {
 	}
 }
 
-func (g Game) handleInCheck(payerInCheck player.Color, checkingPieces []piece.Piece) {
-	if len(checkingPieces) == 0 {
-		return
-	}
+func (g Game) handleChecks(c player.Color) {
 	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
-		return p.Color == piece.Color(payerInCheck) && p.Type == piece.King
+		return p.Color == piece.Color(c) && p.Type == piece.King
 	})
 	if !found {
 		panic("King not found")
 	}
+
+	opposingPieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
+		return p.Color != piece.Color(c)
+	})
+
+	var checkingPieces []piece.Piece
+	for _, op := range opposingPieces {
+		if lo.Contains(op.LegalMoves, k.Position) {
+			checkingPieces = append(checkingPieces, op)
+		}
+	}
+
+	if len(checkingPieces) == 0 {
+		return
+	}
+
 	//	If double-check
 	if len(checkingPieces) > 1 {
 		//	If king has no legal moves end the game
 		if len(k.LegalMoves) == 0 {
-			//g.End(lo.ToPtr(player.GetOpposingColor(payerInCheck)))
+			//	Game ends
 		} else {
 			//	Otherwise clear legal moves of other pieces (king has to move)
 			lo.ForEach(g.Board.Pieces, func(p piece.Piece, _ int) {
@@ -232,34 +276,16 @@ func (g Game) handleInCheck(payerInCheck player.Color, checkingPieces []piece.Pi
 	}
 }
 
-func (g Game) IsInCheckBy(c player.Color) (checkingPieces []piece.Piece) {
-	k, found := lo.Find(g.Board.Pieces, func(p piece.Piece) bool {
-		return p.Color == piece.Color(c) && p.Type == piece.King
-	})
-	if !found {
-		panic("King not found")
-	}
-
-	opposingPieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
-		return p.Color != piece.Color(c)
-	})
-
-	for _, op := range opposingPieces {
-		if lo.Contains(op.LegalMoves, k.Position) {
-			checkingPieces = append(checkingPieces, op)
-		}
-	}
-
-	return checkingPieces
-}
-
-func (g Game) UpdateLegalMovesInParallel() {
+func (g Game) UpdateLegalMovesInParallel(c player.Color) {
 	var wg sync.WaitGroup
-	for _, p := range g.Board.Pieces {
+	playerPieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
+		return p.Color == piece.Color(c)
+	})
+	for _, p := range playerPieces {
 		wg.Add(1)
 		go func(p piece.Piece) {
 			defer wg.Done()
-			movable := getMovable(p.Type, g.MoveHistory)
+			movable := GetMovableForPieceType(p.Type, g.MoveHistory)
 			movable.UpdateLegalMoves(&p, g.Board)
 			fmt.Println(p.Type, p.LegalMoves)
 		}(p)
