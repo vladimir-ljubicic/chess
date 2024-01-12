@@ -17,137 +17,111 @@ func TestGrid_GetMedialCells(t *testing.T) {
 		{
 			Name: "Row",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 0,
-				}},
+				X: 0,
+				Y: 0,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 3,
-					Y: 0,
-				}},
+				X: 3,
+				Y: 0,
+			},
 			Expected: []Cell{
 				{
-					Coordinates{
-						X: 1,
-						Y: 0,
-					},
+					X: 1,
+					Y: 0,
 				},
+
 				{
-					Coordinates{
-						X: 2,
-						Y: 0,
-					},
+					X: 2,
+					Y: 0,
 				},
 			},
 		},
 		{
 			Name: "Column",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 0,
-				}},
+				X: 0,
+				Y: 0,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 0,
-					Y: 3,
-				}},
+				X: 0,
+				Y: 3,
+			},
 			Expected: []Cell{
 				{
-					Coordinates{
-						X: 0,
-						Y: 1,
-					},
+					X: 0,
+					Y: 1,
 				},
 				{
-					Coordinates{
-						X: 0,
-						Y: 2,
-					},
+					X: 0,
+					Y: 2,
 				},
 			},
 		},
 		{
 			Name: "Ascending diagonal",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 0,
-				}},
+				X: 0,
+				Y: 0,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 3,
-					Y: 3,
-				}},
+				X: 3,
+				Y: 3,
+			},
 			Expected: []Cell{
 				{
-					Coordinates{
-						X: 1,
-						Y: 1,
-					},
+					X: 1,
+					Y: 1,
 				},
 				{
-					Coordinates{
-						X: 2,
-						Y: 2,
-					},
+					X: 2,
+					Y: 2,
 				},
 			},
 		},
 		{
 			Name: "Descending diagonal",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 7,
-				}},
+				X: 0,
+				Y: 7,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 3,
-					Y: 4,
-				}},
+
+				X: 3,
+				Y: 4,
+			},
 			Expected: []Cell{
 				{
-					Coordinates{
-						X: 1,
-						Y: 6,
-					},
+					X: 1,
+					Y: 6,
 				},
 				{
-					Coordinates{
-						X: 2,
-						Y: 5,
-					},
+					X: 2,
+					Y: 5,
 				},
 			},
 		},
 		{
 			Name: "Directionally non-connected",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 7,
-				}},
+				X: 0,
+				Y: 7,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 1,
-					Y: 5,
-				}},
+				X: 1,
+				Y: 5,
+			},
 			Expected: []Cell{},
 		},
 		{
 			Name: "Identical cells",
 			C1: Cell{
-				Coordinates{
-					X: 0,
-					Y: 0,
-				}},
+				X: 0,
+				Y: 0,
+			},
 			C2: Cell{
-				Coordinates{
-					X: 0,
-					Y: 0,
-				}},
+				X: 0,
+				Y: 0,
+			},
 			Expected: []Cell{},
 		},
 	}
@@ -163,25 +137,10 @@ func TestGrid_GetMedialCells(t *testing.T) {
 func TestGrid_IsValidCell(t *testing.T) {
 	g := NewGrid(3)
 
-	assert.True(t, g.IsValidCell(Cell{
-		Coordinates{
-			X: 2,
-			Y: 2,
-		},
-	}))
+	assert.True(t, g.IsValidCell(Cell{X: 2, Y: 2}))
 
-	assert.False(t, g.IsValidCell(Cell{
-		Coordinates{
-			X: 3,
-			Y: 2,
-		},
-	}))
+	assert.False(t, g.IsValidCell(Cell{X: 3, Y: 2}))
 
-	assert.False(t, g.IsValidCell(Cell{
-		Coordinates{
-			X: 2,
-			Y: 3,
-		},
-	}))
+	assert.False(t, g.IsValidCell(Cell{X: 2, Y: 3}))
 
 }

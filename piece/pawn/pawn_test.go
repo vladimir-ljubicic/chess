@@ -14,39 +14,21 @@ func Test_PawnMove(t *testing.T) {
 
 	//	White pawn
 	pawnH2, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 7,
-				Y: 1,
-			}}
+		return p.Position == grid.Cell{X: 7, Y: 1}
 	})
 
 	movable := Pawn{}
 	moves := movable.GetLegalMoves(pawnH2, b)
 
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 7,
-			Y: 2,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 7, Y: 2})
 
 	//	Black pawn
 	pawnH7, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 7,
-				Y: 6,
-			}}
+		return p.Position == grid.Cell{X: 7, Y: 6}
 	})
 
 	moves = movable.GetLegalMoves(pawnH7, b)
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 7,
-			Y: 5,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 7, Y: 5})
 }
 
 func Test_PawnDoubleMove(t *testing.T) {
@@ -54,81 +36,45 @@ func Test_PawnDoubleMove(t *testing.T) {
 
 	//	White pawn
 	pawnH2, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 7,
-				Y: 1,
-			}}
+		return p.Position == grid.Cell{X: 7, Y: 1}
 	})
 
 	movable := Pawn{}
 	moves := movable.GetLegalMoves(pawnH2, b)
 
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 7,
-			Y: 3,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 7, Y: 3})
 
 	//	Black pawn
 	pawnH7, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 7,
-				Y: 6,
-			}}
+		return p.Position == grid.Cell{X: 7, Y: 6}
 	})
 
 	moves = movable.GetLegalMoves(pawnH7, b)
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 7,
-			Y: 4,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 7, Y: 4})
 }
 
 func Test_PawnCaptureLeft(t *testing.T) {
 	b := test_utils.GetTestPosition()
 
 	pawnE4, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 4,
-				Y: 3,
-			}}
+		return p.Position == grid.Cell{X: 4, Y: 3}
 	})
 
 	movable := Pawn{}
 	moves := movable.GetLegalMoves(pawnE4, b)
 
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 3,
-			Y: 4,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 3, Y: 4})
 }
 
 func Test_PawnCaptureRight(t *testing.T) {
 	b := test_utils.GetTestPosition()
 
 	pawnE4, _ := lo.Find(b.Pieces, func(p piece.Piece) bool {
-		return p.Position == grid.Cell{
-			grid.Coordinates{
-				X: 3,
-				Y: 4,
-			}}
+		return p.Position == grid.Cell{X: 3, Y: 4}
 	})
 
 	movable := Pawn{}
 	moves := movable.GetLegalMoves(pawnE4, b)
 
-	require.Contains(t, moves, grid.Cell{
-		grid.Coordinates{
-			X: 4,
-			Y: 3,
-		},
-	})
+	require.Contains(t, moves, grid.Cell{X: 4, Y: 3})
 }

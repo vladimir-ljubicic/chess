@@ -1,12 +1,8 @@
 package grid
 
-type Coordinates struct {
+type Cell struct {
 	X int
 	Y int
-}
-
-type Cell struct {
-	Coordinates
 }
 
 type Direction string

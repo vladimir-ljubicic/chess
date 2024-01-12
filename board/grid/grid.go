@@ -23,10 +23,8 @@ func (g Grid) initCoordinates() {
 
 	for i, _ := range g.cells {
 		g.cells[i] = Cell{
-			Coordinates: Coordinates{
-				X: x,
-				Y: y,
-			},
+			X: x,
+			Y: y,
 		}
 		y++
 

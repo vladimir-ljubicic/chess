@@ -55,10 +55,9 @@ func ToGridCell(space string) *grid.Cell {
 	}
 
 	return &grid.Cell{
-		Coordinates: grid.Coordinates{
-			X: row,
-			Y: column + 1,
-		}}
+		X: row,
+		Y: column + 1,
+	}
 }
 
 func (b Board) GetPieceOn(c grid.Cell) *piece.Piece {
