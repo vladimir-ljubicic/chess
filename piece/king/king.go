@@ -11,7 +11,7 @@ type King struct {
 	MoveHistory []piece.Move
 }
 
-func (k King) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (k King) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	var moves []grid.Cell
 
 	moves = append(moves,
@@ -38,6 +38,5 @@ func (k King) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		moves = diff
 	}
 
-	// if len(moves) == 0 signify checkmate , otherwise =>
-	p.LegalMoves = moves
+	return moves
 }

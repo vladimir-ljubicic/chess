@@ -69,19 +69,6 @@ func NewGame(options ...GameOption) Game {
 	}
 }
 
-func (g Game) UpdateLegalMovesForPlayer(c player.Color) error {
-	pieces := lo.Filter(g.Board.Pieces, func(p piece.Piece, _ int) bool {
-		return p.Color == piece.Color(c)
-	})
-
-	for _, piece := range pieces {
-		movable := GetMovableForPieceType(piece.Type, g.MoveHistory)
-		movable.UpdateLegalMoves(&piece, g.Board)
-	}
-
-	return nil
-}
-
 func GetMovableForPieceType(t piece.Type, moveHistory []piece.Move) board.Movable {
 	switch t {
 	case piece.King:
@@ -286,8 +273,13 @@ func (g Game) UpdateLegalMovesInParallel(c player.Color) {
 		go func(p piece.Piece) {
 			defer wg.Done()
 			movable := GetMovableForPieceType(p.Type, g.MoveHistory)
-			movable.UpdateLegalMoves(&p, g.Board)
-			fmt.Println(p.Type, p.LegalMoves)
+			moves := movable.GetLegalMoves(p, g.Board)
+			_, index, _ := lo.FindIndexOf(g.Board.Pieces, func(item piece.Piece) bool {
+				return item.Position == p.Position
+			})
+
+			p.LegalMoves = moves
+			g.Board.Pieces[index] = p
 		}(p)
 	}
 	wg.Wait()

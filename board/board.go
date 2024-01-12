@@ -10,7 +10,7 @@ import (
 )
 
 type Movable interface {
-	UpdateLegalMoves(p *piece.Piece, b Board)
+	GetLegalMoves(p piece.Piece, b Board) []grid.Cell
 }
 
 type Board struct {

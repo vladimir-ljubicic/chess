@@ -11,7 +11,7 @@ type Pawn struct {
 	MoveHistory []piece.Move
 }
 
-func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (pw Pawn) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	var moves []grid.Cell
 
 	//	move once if vacant
@@ -72,7 +72,7 @@ func (pw Pawn) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	p.LegalMoves = moves
+	return moves
 }
 
 func isPawnStartingPosition(c piece.Color, cell grid.Cell) bool {

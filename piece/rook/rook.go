@@ -9,7 +9,7 @@ import (
 
 type Rook struct{}
 
-func (r Rook) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (r Rook) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	var moves []grid.Cell
 	for _, direction := range grid.Directions {
 		move, found := grid.Movements[direction]
@@ -36,5 +36,5 @@ func (r Rook) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	p.LegalMoves = moves
+	return moves
 }

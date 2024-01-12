@@ -9,7 +9,7 @@ import (
 
 type Queen struct{}
 
-func (q Queen) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (q Queen) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	var moves []grid.Cell
 	for _, direction := range grid.Directions {
 		move, found := grid.Movements[direction]
@@ -61,5 +61,5 @@ func (q Queen) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	p.LegalMoves = moves
+	return moves
 }

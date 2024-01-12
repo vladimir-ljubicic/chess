@@ -9,7 +9,7 @@ import (
 
 type Knight struct{}
 
-func (k Knight) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (n Knight) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	moves := []grid.Cell{
 		p.Position.Up().Up().Left(),
 		p.Position.Up().Up().Right(),
@@ -34,5 +34,5 @@ func (k Knight) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		return true
 	})
 
-	p.LegalMoves = moves
+	return moves
 }

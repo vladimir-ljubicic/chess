@@ -9,7 +9,7 @@ import (
 
 type Bishop struct{}
 
-func (bs Bishop) UpdateLegalMoves(p *piece.Piece, b board.Board) {
+func (bs Bishop) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	var moves []grid.Cell
 	for _, diagonalDirection := range grid.DiagonalDirections {
 		move, found := grid.DiagonalMovements[diagonalDirection]
@@ -36,5 +36,5 @@ func (bs Bishop) UpdateLegalMoves(p *piece.Piece, b board.Board) {
 		}
 	}
 
-	p.LegalMoves = moves
+	return moves
 }
