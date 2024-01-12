@@ -28,15 +28,29 @@ func (pw Pawn) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 	}
 
 	//	capture left
-	x := b.GetPieceOn(p.Position.Up().Left())
-	if x != nil && (*x).Color != p.Color {
-		moves = append(moves, p.Position.Up().Left())
+	if p.Color == piece.White {
+		x := b.GetPieceOn(p.Position.Up().Left())
+		if x != nil && (*x).Color != p.Color {
+			moves = append(moves, p.Position.Up().Left())
+		}
+	} else {
+		x := b.GetPieceOn(p.Position.Down().Left())
+		if x != nil && (*x).Color != p.Color {
+			moves = append(moves, p.Position.Down().Left())
+		}
 	}
 
 	//	capture right
-	x = b.GetPieceOn(p.Position.Up().Right())
-	if x != nil && (*x).Color != p.Color {
-		moves = append(moves, p.Position.Up().Right())
+	if p.Color == piece.White {
+		x := b.GetPieceOn(p.Position.Up().Right())
+		if x != nil && (*x).Color != p.Color {
+			moves = append(moves, p.Position.Up().Right())
+		}
+	} else {
+		x := b.GetPieceOn(p.Position.Down().Right())
+		if x != nil && (*x).Color != p.Color {
+			moves = append(moves, p.Position.Down().Right())
+		}
 	}
 
 	//	double move from starting position if both subsequent squares are vacant
