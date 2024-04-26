@@ -79,9 +79,17 @@ func (pw Pawn) GetLegalMoves(p piece.Piece, b board.Board) []grid.Cell {
 		//	capture "en passant"
 		if isDoubleMove(lastMove) && areAdjacentPawns(p.Position, lastMove.Piece.Position) {
 			if lastMove.Piece.Position.X < p.Position.X {
-				moves = append(moves, p.Position.Up().Left())
+				if p.Color == piece.White {
+					moves = append(moves, p.Position.Up().Left())
+				} else {
+					moves = append(moves, p.Position.Down().Left())
+				}
 			} else {
-				moves = append(moves, p.Position.Up().Right())
+				if p.Color == piece.White {
+					moves = append(moves, p.Position.Up().Right())
+				} else {
+					moves = append(moves, p.Position.Down().Right())
+				}
 			}
 		}
 	}
@@ -98,7 +106,7 @@ func isPawnStartingPosition(c piece.Color, cell grid.Cell) bool {
 }
 
 func isDoubleMove(move piece.Move) bool {
-	if isPawnStartingPosition(move.Piece.Color, move.From) {
+	if !isPawnStartingPosition(move.Piece.Color, move.From) {
 		return false
 	}
 

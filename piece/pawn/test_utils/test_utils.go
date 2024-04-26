@@ -40,40 +40,16 @@ func GetTestPosition() board.Board {
 			LegalMoves: nil,
 		},
 		piece.Piece{
-			Type:       piece.Knight,
+			Type:       piece.Pawn,
 			Color:      piece.White,
-			Position:   grid.Cell{X: 1, Y: 3},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Bishop,
-			Color:      piece.White,
-			Position:   grid.Cell{X: 4, Y: 2},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Rook,
-			Color:      piece.White,
-			Position:   grid.Cell{X: 3, Y: 0},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Queen,
-			Color:      piece.White,
-			Position:   grid.Cell{X: 5, Y: 2},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.King,
-			Color:      piece.White,
-			Position:   grid.Cell{X: 6, Y: 0},
+			Position:   grid.Cell{X: 2, Y: 4},
 			LegalMoves: nil,
 		},
 		// Black =>
 		piece.Piece{
 			Type:       piece.Pawn,
 			Color:      piece.Black,
-			Position:   grid.Cell{X: 5, Y: 6},
+			Position:   grid.Cell{X: 7, Y: 6},
 			LegalMoves: nil,
 		},
 		piece.Piece{
@@ -85,7 +61,7 @@ func GetTestPosition() board.Board {
 		piece.Piece{
 			Type:       piece.Pawn,
 			Color:      piece.Black,
-			Position:   grid.Cell{X: 7, Y: 6},
+			Position:   grid.Cell{X: 5, Y: 3},
 			LegalMoves: nil,
 		},
 		piece.Piece{
@@ -98,30 +74,6 @@ func GetTestPosition() board.Board {
 			Type:       piece.Pawn,
 			Color:      piece.Black,
 			Position:   grid.Cell{X: 1, Y: 5},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Knight,
-			Color:      piece.Black,
-			Position:   grid.Cell{X: 6, Y: 3},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Rook,
-			Color:      piece.Black,
-			Position:   grid.Cell{X: 4, Y: 7},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.Queen,
-			Color:      piece.Black,
-			Position:   grid.Cell{X: 6, Y: 5},
-			LegalMoves: nil,
-		},
-		piece.Piece{
-			Type:       piece.King,
-			Color:      piece.Black,
-			Position:   grid.Cell{X: 6, Y: 7},
 			LegalMoves: nil,
 		},
 	)
