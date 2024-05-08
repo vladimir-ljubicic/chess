@@ -1,0 +1,42 @@
+div {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  width: 25%;
+  height: 25%;
+  position: relative;
+  vertical-align: top; /* This is the fix */
+}
+.cell-black {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background: rgba(67, 103, 150, 0.822);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 0;
+}
+.container {
+  position: relative;
+  width: 100px; /* Adjust the width and height of the container as needed */
+  height: 100px;
+}
+.cell-white {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background: rgba(235, 236, 216, 0.822);
+}
+.piece-svg {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  fill: #fff; /* Fill color of the SVG */
+}
