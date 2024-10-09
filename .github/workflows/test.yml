@@ -1,0 +1,30 @@
+name: Test File Copy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-file-copy:
+    runs-on: self-hosted
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Copy main.go to a specific location on macOS
+      - name: Copy main.go to ~/test-directory
+        run: |
+          # Define the source file and destination directory
+          SOURCE_FILE="main.go"  # Since main.go is in the root of the repo
+          DEST_DIR="$HOME/Code/test-directory" # Adjust this path as needed
+
+          # Create the destination directory if it doesn't exist
+          mkdir -p "$DEST_DIR"
+
+          # Copy the file to the destination directory
+          cp "$SOURCE_FILE" "$DEST_DIR/"
+
+          # List the destination directory to confirm the file was copied
+          ls -la "$DEST_DIR"
